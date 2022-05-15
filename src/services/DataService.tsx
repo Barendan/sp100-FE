@@ -1,6 +1,8 @@
 import { Reservation, ReservationState, Space, User } from "../model/Model";
 import { S3, config } from 'aws-sdk';
-import { config as appConfig} from './config'
+import { config as appConfig} from './config';
+import { generateRandomId } from '../utils/Utils';
+
 
 config.update({
     region: appConfig.REGION
@@ -38,5 +40,22 @@ export class DataService {
             return '';
         }
     }
+
+    public async uploadProfilePicture(file: File){
+        return await this.uploadPublicFile(file, appConfig.PROFILE_PHOTOS_BUCKET)
+    }
+
+    private async uploadPublicFile(file: File, bucket: string){
+        const fileName = generateRandomId() +  file.name;
+        const uploadResult = await this.getS3Client().upload({
+            Bucket: bucket,
+            Key: fileName,
+            Body: file,
+            ACL: 'public-read'
+        }).promise();
+        return uploadResult.Location
+    }
+
+
 
 }
