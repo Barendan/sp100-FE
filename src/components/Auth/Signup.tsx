@@ -84,6 +84,34 @@ export class SignUp extends React.Component<{
         }
     }
 
+    private setUserName(event: CustomEvent){
+        this.setState({userName: event.target.value})
+    }
+
+    private setEmail(event: CustomEvent){
+        this.setState({email: event.target.value})
+    }
+
+    private setPassword(event: CustomEvent){
+        this.setState({password: event.target.value})
+    }
+
+    private setConfirmPassword(event: CustomEvent){
+        this.setState({confirmPassword: event.target.value})
+    }
+
+    private setConfirmationCode(event: CustomEvent){
+        this.setState({confirmationCode: event.target.value})
+    }
+
+    private renderErrorMessage(){
+        if (this.state.errorMessage) {
+            return <label className='error'> {this.state.errorMessage}</label>
+        }
+    }
+    
+
+
     private renderLoginForm(){
         if (this.state.shouldConfirmAccount) {
             return <div>
@@ -93,6 +121,7 @@ export class SignUp extends React.Component<{
             <input value={this.state.confirmationCode} onChange = {e => this.setConfirmationCode(e)}/>
              <input type='submit' value='Register'/>
             </form>
+            {this.renderErrorMessage()}
         </div> 
         } else {
             return <div>
@@ -108,6 +137,7 @@ export class SignUp extends React.Component<{
             <input value={this.state.confirmPassword} onChange = {e => this.setConfirmPassword(e)} type='password'/>
             <input type='submit' value='Register'/>
             </form>
+            {this.renderErrorMessage()}
         </div> 
         }
     }
