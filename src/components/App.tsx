@@ -21,7 +21,30 @@ export class App extends React.Component<{}, AppState>{
       user: undefined
     }
 
+    this.setUser = this.setUser.bind(this);
+    this.clearUser = this.clearUser.bind(this);
+
   }
+
+
+  private clearUser(){
+    this.setState({
+      user: undefined
+    });
+  }
+
+  private async setUser(user: User){
+    const isAdmin = this.authService.isUserAdmin(user);
+    if (isAdmin) {
+      user.isAdmin = true;
+    }
+    this.setState({
+      user: user
+    })
+    this.dataService.setUser(user);
+    await this.authService.getAWSTemporaryCreds(user.cognitoUser);
+  }
+
 
   render(){
     return (
